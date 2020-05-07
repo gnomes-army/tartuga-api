@@ -11,13 +11,27 @@ export class AuthController {
   @Get('google')
   public google() { }
 
+  @UseGuards(AuthGuard('vkontakte'))
+  @Get('vk')
+  public vk() { }
+
   @UseGuards(AuthGuard('google'))
   @Get('google/callback')
   public googleCallback(
     @Req() request: Request,
     @Session() session: { socketId?: string },
   ): string {
-    this.authGateway.server.in(session.socketId).emit('google', { jwt: 'lol.kek.jwt-cheburek' });
+    this.authGateway.server.in(session.socketId).emit('auth', { jwt: 'lol.kek.jwt-cheburek' });
+    return '';
+  }
+
+  @UseGuards(AuthGuard('vkontakte'))
+  @Get('vk/callback')
+  public vkCallback(
+    @Req() request: Request,
+    @Session() session: { socketId?: string },
+  ): string {
+    this.authGateway.server.in(session.socketId).emit('auth', { jwt: 'lol.kek.jwt-cheburek' });
     return '';
   }
 }
