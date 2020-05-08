@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards, Session } from '@nestjs/common';
+import { Controller, Get, Req, HttpCode, UseGuards, Session } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthGateway } from './auth.gateway';
 import { AuthGuard } from '@nestjs/passport';
@@ -11,27 +11,25 @@ export class AuthController {
   @Get('google')
   public google() { }
 
-  @UseGuards(AuthGuard('vkontakte'))
+  @UseGuards(AuthGuard('vk'))
   @Get('vk')
   public vk() { }
 
   @UseGuards(AuthGuard('google'))
   @Get('google/callback')
+  @HttpCode(204)
   public googleCallback(
-    @Req() request: Request,
     @Session() session: { socketId?: string },
-  ): string {
-    this.authGateway.server.in(session.socketId).emit('auth', { jwt: 'lol.kek.jwt-cheburek' });
-    return '';
+  ) {
+    this.authGateway.server.in(session.socketId).emit('auth', { jwt: 'aaa.bbb.ccc' });
   }
 
-  @UseGuards(AuthGuard('vkontakte'))
+  @UseGuards(AuthGuard('vk'))
   @Get('vk/callback')
+  @HttpCode(204)
   public vkCallback(
-    @Req() request: Request,
     @Session() session: { socketId?: string },
-  ): string {
-    this.authGateway.server.in(session.socketId).emit('auth', { jwt: 'lol.kek.jwt-cheburek' });
-    return '';
+  ) {
+    this.authGateway.server.in(session.socketId).emit('auth', { jwt: 'aaa.bbb.ccc' });
   }
 }

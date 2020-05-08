@@ -1,16 +1,18 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
-import { SessionAuthMiddleware } from './session-auth.middleware';
+import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth.controller';
 import { AuthGateway } from './auth.gateway';
-import { GoogleStrategy } from './strategies/google.strategy';
-import { VkStrategy } from './strategies/vk.strategy';
-import { PassportModule } from '@nestjs/passport';
+import { AuthService } from './auth.service';
+import { GoogleStrategy } from './auth-strategies/google.strategy';
+import { VkStrategy } from './auth-strategies/vk.strategy';
+import { authMiddleware } from './auth.middleware';
 
 @Module({
   imports: [
     PassportModule,
   ],
   providers: [
+    AuthService,
     AuthGateway,
     GoogleStrategy,
     VkStrategy,
@@ -22,7 +24,7 @@ import { PassportModule } from '@nestjs/passport';
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(SessionAuthMiddleware)
+      .apply(authMiddleware)
       .forRoutes('\/auth\/[^\/]+$');
   }
 }
