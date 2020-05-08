@@ -8,7 +8,7 @@ export class VkStrategy extends PassportStrategy(Strategy, 'vk') {
     super({
       clientID: process.env.VK_APP_ID,
       clientSecret: process.env.VK_SECURE_KEY,
-      callbackURL: process.env.VK_CALLBACK_URL,
+      callbackURL: `${process.env.GATEWAY}/auth/vk/callback`,
     });
   }
 
