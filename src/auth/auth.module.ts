@@ -6,10 +6,12 @@ import { AuthService } from './auth.service';
 import { GoogleStrategy } from './auth-strategies/google.strategy';
 import { VkStrategy } from './auth-strategies/vk.strategy';
 import { authMiddleware } from './auth.middleware';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
     PassportModule,
+    UsersModule,
   ],
   providers: [
     AuthService,

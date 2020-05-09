@@ -19,17 +19,19 @@ export class AuthController {
   @Get('google/callback')
   @HttpCode(204)
   public googleCallback(
+    @Req() req: Request,
     @Session() session: { socketId?: string },
   ) {
-    this.authGateway.server.in(session.socketId).emit('auth', { jwt: 'aaa.bbb.ccc' });
+    this.authGateway.server.in(session.socketId).emit('auth', req.user);
   }
 
   @UseGuards(AuthGuard('vk'))
   @Get('vk/callback')
   @HttpCode(204)
   public vkCallback(
+    @Req() req: Request,
     @Session() session: { socketId?: string },
   ) {
-    this.authGateway.server.in(session.socketId).emit('auth', { jwt: 'aaa.bbb.ccc' });
+    this.authGateway.server.in(session.socketId).emit('auth', req.user);
   }
 }
