@@ -4,14 +4,14 @@ import { Profile, Strategy, VerifyCallback } from 'passport-vkontakte';
 import { AuthService } from '../auth.service';
 
 @Injectable()
-export class VkStrategy extends PassportStrategy(Strategy, 'vk') {
+export class VkontakteStrategy extends PassportStrategy(Strategy, 'vkontakte') {
   constructor(
     private readonly authService: AuthService,
   ) {
     super({
       clientID: process.env.VK_APP_ID,
       clientSecret: process.env.VK_SECURE_KEY,
-      callbackURL: `${process.env.GATEWAY}/auth/vk/callback`,
+      callbackURL: `${process.env.GATEWAY}/auth/vkontakte/callback`,
     });
   }
 

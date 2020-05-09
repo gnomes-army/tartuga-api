@@ -4,7 +4,7 @@ import { AuthController } from './auth.controller';
 import { AuthGateway } from './auth.gateway';
 import { AuthService } from './auth.service';
 import { GoogleStrategy } from './auth-strategies/google.strategy';
-import { VkStrategy } from './auth-strategies/vk.strategy';
+import { VkontakteStrategy } from './auth-strategies/vkontakte.strategy';
 import { authMiddleware } from './auth.middleware';
 import { UsersModule } from '../users/users.module';
 
@@ -17,7 +17,7 @@ import { UsersModule } from '../users/users.module';
     AuthService,
     AuthGateway,
     GoogleStrategy,
-    VkStrategy,
+    VkontakteStrategy,
   ],
   controllers: [
     AuthController,

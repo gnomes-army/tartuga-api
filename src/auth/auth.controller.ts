@@ -11,9 +11,9 @@ export class AuthController {
   @Get('google')
   public google() { }
 
-  @UseGuards(AuthGuard('vk'))
-  @Get('vk')
-  public vk() { }
+  @UseGuards(AuthGuard('vkontakte'))
+  @Get('vkontakte')
+  public vkontakte() { }
 
   @UseGuards(AuthGuard('google'))
   @Get('google/callback')
@@ -25,10 +25,10 @@ export class AuthController {
     this.authGateway.server.in(session.socketId).emit('auth', req.user);
   }
 
-  @UseGuards(AuthGuard('vk'))
-  @Get('vk/callback')
+  @UseGuards(AuthGuard('vkontakte'))
+  @Get('vkontakte/callback')
   @HttpCode(204)
-  public vkCallback(
+  public vkontakteCallback(
     @Req() req: Request,
     @Session() session: { socketId?: string },
   ) {
