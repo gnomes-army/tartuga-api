@@ -1,37 +1,40 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SessionModule, NestSessionOptions } from 'nestjs-session';
 import * as redis from 'redis';
 import * as expressSession from 'express-session';
 import * as connectRedis from 'connect-redis';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: process.env.DATABASE_URL,
-      autoLoadEntities: true,
-      synchronize: true,
-      logging: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        url: configService.get<string>('DATABASE_URL'),
+        autoLoadEntities: true,
+        synchronize: true,
+        logging: true,
+      }),
     }),
     SessionModule.forRootAsync({
-      useFactory: async (): Promise<NestSessionOptions> => {
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService): Promise<NestSessionOptions> => {
         const RedisStore = connectRedis(expressSession);
         const redisClient = redis.createClient({
-          url: process.env.REDIS_URL,
+          url: configService.get<string>('REDIS_URL'),
         });
-
         return {
           session: {
             store: new RedisStore({
               client: redisClient,
             }),
-            secret: process.env.SESSION_SECRET,
+            secret: configService.get<string>('SESSION_SECRET'),
             resave: true,
             saveUninitialized: true,
           },
@@ -40,7 +43,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

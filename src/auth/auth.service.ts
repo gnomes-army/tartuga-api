@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
+import { JwtService } from '@nestjs/jwt';
 import { Profile } from 'passport';
-import { sign } from 'jsonwebtoken';
+import { UsersService } from '../users/users.service';
+
 import { v5 as uuid } from 'uuid';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async signIn(profile: Profile): Promise<string> {
@@ -21,9 +23,6 @@ export class AuthService {
       photo: profile.photos[0]?.value,
     });
 
-    return sign({ ...user }, process.env.JWT_SECRET, {
-      algorithm: 'HS256',
-      expiresIn: process.env.JWT_EXPIRES,
-    });
+    return this.jwtService.sign({ ...user });
   }
 }

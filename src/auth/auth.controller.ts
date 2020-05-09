@@ -5,7 +5,9 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authGateway: AuthGateway) {}
+  constructor(
+    private readonly authGateway: AuthGateway,
+  ) {}
 
   @UseGuards(AuthGuard('google'))
   @Get('google')
